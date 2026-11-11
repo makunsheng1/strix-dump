@@ -6,11 +6,10 @@ jobs:
   dump:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Pull image
         run: docker pull ghcr.io/usestrix/strix-sandbox:latest
-
-      - name: Show size
-        run: docker images ghcr.io/usestrix/strix-sandbox
 
       - name: Save and compress
         run: |
@@ -25,5 +24,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "sandbox-${GITHUB_RUN_ID}" sandbox.tar.gz sha256.txt \
+            -R "${GITHUB_REPOSITORY}" \
             --title "strix-sandbox" \
-            --notes "ghcr.io/usestrix/strix-sandbox:latest exported at $(date -u)"
+            --notes "ghcr.io/usestrix/strix-sandbox:latest"
